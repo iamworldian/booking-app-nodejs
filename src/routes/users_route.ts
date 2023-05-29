@@ -1,6 +1,35 @@
-import { Router } from 'express'
+import { Router } from 'express';
 
-const router = Router()
+import {
+  deleteUser,
+  editUser,
+  getAllUsers,
+  getUser,
+} from '../Controller/user_controller';
+import tryCatch from '../utils/tryCatch';
+import { verifyAdmin, verifyToken, verifyUser } from '../utils/verifyToken';
+const router = Router();
 
-// CREATE
-router.post('/', (req, res) => {})
+// Update
+router.put(
+  '/:id',
+  tryCatch(verifyToken),
+  tryCatch(verifyUser),
+  tryCatch(editUser),
+);
+
+// Delete
+router.delete(
+  '/:id',
+  tryCatch(verifyToken),
+  tryCatch(verifyAdmin),
+  tryCatch(deleteUser),
+);
+
+// GET One
+router.get('/:id', tryCatch(getUser));
+
+//  GET All
+router.get('/', tryCatch(getAllUsers));
+
+export default router;
